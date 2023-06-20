@@ -47,6 +47,7 @@ def main():
         bd_imgs.append(bd_img)
     vx, vy = 5,5
 
+#移動方向に応じてキャラの角度を変更
     kk_img_dic = {
     (0,-5):  pg.transform.rotozoom(kf_img, 90, 1.0),
     (5,-5):  pg.transform.rotozoom(kf_img, 45, 1.0),
@@ -80,14 +81,14 @@ def main():
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
         kk_rct.move_ip(sum_mv)
-        if check_bound(kk_rct) != (True,True):
+        if check_bound(kk_rct) != (True,True):#壁の衝突
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
         avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)] #時間とともに加速
         bd_img = bd_imgs[min(tmr//500, 9)] #時間とともに拡大
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img_dic[sum_mv[0],sum_mv[1]], kk_rct)
-        bd_rct.move_ip(avx,avy)
+        bd_rct.move_ip(avx,avy)#加速度に合わせて移動
         yoko, tate = check_bound(bd_rct)
         if not yoko:  # 横方向に画面外だったら
             vx *= -1
