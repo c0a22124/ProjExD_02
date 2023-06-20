@@ -10,6 +10,7 @@ delta = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0),
 }
+accs = [a for a in range(1, 11)]
 
 def check_bound(rect:pg.Rect) -> tuple[bool,bool]:
     yoko,tate = True,True
@@ -27,6 +28,7 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900,400
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kf_img =  pg.transform.flip(kk_img, True, False)
     clock = pg.time.Clock()
     bd_img = pg.Surface((20, 20))
     bd_img.set_colorkey([0,0,0])
@@ -35,9 +37,26 @@ def main():
     y = random.randint(0,HEIGHT)
     bd_rct = bd_img.get_rect()
     bd_rct.center = x,y
-
+    bd_imgs=[]
+    for r in range(1, 11):
+        bd_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bd_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bd_img.set_colorkey([0,0,0])
+        bd_imgs.append(bd_img)
     vx, vy = 5,5
 
+    kk_img_dic = {
+    (0,-5):  pg.transform.rotozoom(kf_img, 90, 1.0),
+    (5,-5):  pg.transform.rotozoom(kf_img, 45, 1.0),
+    (5,0):  pg.transform.rotozoom(kf_img, 0, 1.0),
+    (5,5):  pg.transform.rotozoom(kf_img, 315, 1.0),
+    (0,5):  pg.transform.rotozoom(kf_img, 270, 1.0),
+    (-5,5):  pg.transform.rotozoom(kk_img, 45, 1.0),
+    (-5,0):  pg.transform.rotozoom(kk_img, 0, 1.0),
+    (-5,-5):  pg.transform.rotozoom(kk_img, 315, 1.0),
+    (0,0):kk_img
+    
+}
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -57,9 +76,12 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+        bd_img = bd_imgs[min(tmr//500, 9)]
+
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, kk_rct)
-        bd_rct.move_ip(vx,vy)
+        screen.blit(kk_img_dic[sum_mv[0],sum_mv[1]], kk_rct)
+        bd_rct.move_ip(avx,avy)
         yoko, tate = check_bound(bd_rct)
         if not yoko:  # 横方向に画面外だったら
             vx *= -1
