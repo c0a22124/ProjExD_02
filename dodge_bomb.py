@@ -57,7 +57,6 @@ def main():
     (-5,0):  pg.transform.rotozoom(kk_img, 0, 1.0),
     (-5,-5):  pg.transform.rotozoom(kk_img, 315, 1.0),
     (0,0):kk_img
-    
 }
     tmr = 0
     lose = False
@@ -84,8 +83,8 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
-        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
-        bd_img = bd_imgs[min(tmr//500, 9)]
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)] #時間とともに加速
+        bd_img = bd_imgs[min(tmr//500, 9)] #時間とともに拡大
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img_dic[sum_mv[0],sum_mv[1]], kk_rct)
         bd_rct.move_ip(avx,avy)
