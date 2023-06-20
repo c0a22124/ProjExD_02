@@ -25,10 +25,12 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+    kl_img = pg.image.load("ex02/fig/8.png")
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900,400
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kf_img =  pg.transform.flip(kk_img, True, False)
+    kl_img = pg.transform.rotozoom(kl_img, 0, 2.0)
     clock = pg.time.Clock()
     bd_img = pg.Surface((20, 20))
     bd_img.set_colorkey([0,0,0])
@@ -58,14 +60,20 @@ def main():
     
 }
     tmr = 0
+    lose = False
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         
         if kk_rct.colliderect(bd_rct):  # 練習５
+            lose = True
+            screen.blit(kl_img, [100,100])
+            pg.time.wait(1000)
             print("ゲームオーバー")
             return   # ゲームオーバー 
+        
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]  # 合計移動量
         for k, mv in delta.items():
@@ -78,7 +86,6 @@ def main():
 
         avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
         bd_img = bd_imgs[min(tmr//500, 9)]
-
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img_dic[sum_mv[0],sum_mv[1]], kk_rct)
         bd_rct.move_ip(avx,avy)
@@ -91,6 +98,7 @@ def main():
         
         pg.display.update()
         tmr += 1
+        print(tmr)
         clock.tick(50)
 
 
