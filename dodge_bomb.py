@@ -21,6 +21,8 @@ def main():
     bd_rct = bd_img.get_rect()
     bd_rct.center = x,y
 
+    vx, vy = 5,5
+
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -29,11 +31,12 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
-
+        bd_rct.move_ip(vx,vy)
         screen.blit(bd_img,bd_rct)
+        
         pg.display.update()
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
